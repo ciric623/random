@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <p30fxxxx.h>
+
+_FOSC(CSW_FSCM_OFF & XT_PLL4); // instrukcioni takt je isti kao kristal
+_FWDT(WDT_OFF); // isključi watchdog timer
+
+// Delay funkcija koja koristi for petlje za čekanje
+void delay() {
+    for (int broj1 = 0; broj1 < 700; broj1++) {
+        for (int broj2 = 0; broj2 < 300; broj2++);
+    }
+}
+
+// Funkcija za uključivanje portova
+void turnOnPorts() {
+    // Uključivanje portova B
+    for (int i = 0; i <= 12; i++) {
+        LATBbits.LATB[i] = 1; // Uključuje diode na PORTB od RB0 do RB12
+        delay();
+    }
+    // Uključivanje portova C
+    for (int j = 13; j <= 15; j++) {
+        LATCbits.LATC[j] = 1; // Uključuje diode na PORTC od RC13 do RC15
+        delay();
+    }
+    // Uključivanje portova D
+    for (int k = 0; k <= 3; k++) {
+        LATDbits.LATD[k] = 1; // Uključuje diode na PORTD od RD0 do RD3
+        delay();
+    }
+    // Uključivanje portova A
+    for (int l = 0; l <= 11; l++) {
+        LATAbits.LATA[l] = 1; // Uključuje diode na PORTA od RA0 do RA11
+        delay();
+    }
+    // Uključivanje portova F
+    for (int m = 0; m <= 6; m++) {
+        LATFbits.LATF[m] = 1; // Uključuje diode na PORTF od RF0 do RF6
+        delay();
+    }
+}
+
+// Funkcija za isključivanje portova
+void turnOffPorts() {
+    // Isključivanje portova B
+    for (int i = 0; i <= 12; i++) {
+        LATBbits.LATB[i] = 0; // Isključuje diode na PORTB od RB0 do RB12
+        delay();
+    }
+    // Isključivanje portova C
+    for (int j = 13; j <= 15; j++) {
+        LATCbits.LATC[j] = 0; // Isključuje diode na PORTC od RC13 do RC15
+        delay();
+    }
+    // Isključivanje portova D
+    for (int k = 0; k <= 3; k++) {
+        LATDbits.LATD[k] = 0; // Isključuje diode na PORTD od RD0 do RD3
+        delay();
+    }
+    // Isključivanje portova A
+    for (int l = 0; l <= 11; l++) {
+        LATAbits.LATA[l] = 0; // Isključuje diode na PORTA od RA0 do RA11
+        delay();
+    }
+    // Isključivanje portova F
+    for (int m = 0; m <= 6; m++) {
+        LATFbits.LATF[m] = 0; // Isključuje diode na PORTF od RF0 do RF6
+        delay();
+    }
+}
+
+int main(int argc, char** argv) {
+    ADPCFG = 0xFFFF; // Port B je digitalni
+    TRISA = 0x0000;
+    TRISB = 0x0000;
+    TRISC = 0x0000;
+    TRISD = 0x0000;
+    TRISF = 0x0000; // Portovi A, B, C, D, F su izlazni
+    PORTA = 0x0000;
+    PORTB = 0x0000;
+    PORTC = 0x0000;
+    PORTD = 0x0000;
+    PORTF = 0x0000; // Portovi A, B, C, D, F su postavljeni na logičku nulu
+
+    while (1) {
+        turnOnPorts(); // Pozivanje funkcije za uključivanje portova
+        turnOffPorts(); // Pozivanje funkcije za isključivanje portova
+    }
+
+    return (EXIT_SUCCESS);
+}
